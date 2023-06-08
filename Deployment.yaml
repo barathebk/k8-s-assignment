@@ -1,0 +1,89 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service.name.9
+  namespace: default
+spec:
+  ports:
+  - name: nameme_01
+    port: 8099
+    protocol: tcp
+    targetPort: 8099
+  selector:
+    app: demo.23
+  type: NodePort
+
+
+#This is Deployment Configuration Kube definition
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: demo.23
+  name: deployment.name.21
+  namespace: default
+spec:
+  replicas: 1
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      app: demo.23
+  template:
+    metadata:
+      labels:
+        app: demo.23
+      namespace: default
+    spec:
+      containers:
+      - env:
+        - name: PORT
+          value: '8888'
+        - name: MONGO_DB_URL
+          value: mongodb://nodejs-kubernetes-mongodb:27017/nodejs-kubernetes
+        image: local-nodejs-kubernetes
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8888
+          name: portname.0
+          protocol: tcp
+      terminationGracePeriodSeconds: 0
+
+#This is Deployment Configuration Kube definition
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: demo.51
+  name: deployment.name.73
+  namespace: default
+spec:
+  replicas: 1
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      app: demo.51
+  template:
+    metadata:
+      labels:
+        app: demo.51
+      namespace: default
+    spec:
+      containers:
+      - env:
+        - name: MONGO_DATA_DIR
+          value: /data/db
+        - name: MONGO_LOG_DIR
+          value: /dev/null
+        image: mongo:4.2
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 27017
+          name: portname.0
+          protocol: tcp
+        volumeMounts:
+        - mountPath: /data/db
+          name: pvo.0
+      terminationGracePeriodSeconds: 0
